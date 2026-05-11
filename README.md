@@ -6,15 +6,16 @@ Sistema de e-commerce de productos alimenticios desarrollado con **Spec-Driven D
 
 ## Documentación del sistema
 
-Antes de escribir una línea de código, leé los tres documentos en `docs/`:
+Antes de escribir una línea de código, leé la documentación modular desde `openspec/docs/index.md`:
 
 | Archivo | Contenido |
 |---------|-----------|
-| `docs/Descripcion.txt` | Visión general, actores del sistema y stack tecnológico |
-| `docs/Integrador.txt` | Arquitectura en capas, ERD, API REST y patrones de diseño |
-| `docs/Historias_de_usuario.txt` | US-000 a US-076 con criterios de aceptación y reglas de negocio |
+| `openspec/docs/index.md` | **Entry point** — índice completo de toda la documentación del sistema |
+| `openspec/docs/descripcion/` | Visión general, actores del sistema, stack tecnológico y arquitectura |
+| `openspec/docs/historias/` | Reglas de negocio, épicas e historias de usuario (US-000 a US-076) |
+| `openspec/docs/integrador/` | Especificación técnica: API REST, schemas, UoW, MercadoPago, etc. |
 
-Estos documentos son la fuente de verdad del sistema. El agente los lee antes de cada propuesta.
+> **Navegación rápida**: `openspec/docs/index.md` es el mapa de toda la documentación. Usalo para encontrar exactamente el archivo que necesitás sin leer documentos completos. Los archivos fuente originales están en `docs/`, pero siempre usá `openspec/docs/index.md` como entry point.
 
 ---
 

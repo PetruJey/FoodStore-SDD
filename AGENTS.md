@@ -2,19 +2,34 @@
 
 ## Índice
 
-1. [Visión General del Proyecto](#visión-general-del-proyecto)
-2. [Stack Tecnológico](#stack-tecnológico)
-3. [Arquitectura del Sistema](#arquitectura-del-sistema)
-4. [Modelo de Datos](#modelo-de-datos)
-5. [Máquina de Estados del Pedido](#máquina-de-estados-del-pedido)
-6. [Autenticación y Autorización](#autenticación-y-autorización)
-7. [Convenciones de Código](#convenciones-de-código)
-8. [Estructura de Archivos](#estructura-de-archivos)
-9. [Workflow SDD](#workflow-sdd)
-10. [Reglas de Negocio Clave](#reglas-de-negocio-clave)
-11. [Integración MercadoPago](#integración-mercadopago)
-12. [Gemas del Proyecto](#gemas-del-proyecto)
-13. [SDD Multi-Agent Delegation System](#sdd-multi-agent-delegation-system)
+1. [Documentación del Sistema](#documentación-del-sistema)
+2. [Visión General del Proyecto](#visión-general-del-proyecto)
+3. [Stack Tecnológico](#stack-tecnológico)
+4. [Arquitectura del Sistema](#arquitectura-del-sistema)
+5. [Modelo de Datos](#modelo-de-datos)
+6. [Máquina de Estados del Pedido](#máquina-de-estados-del-pedido)
+7. [Autenticación y Autorización](#autenticación-y-autorización)
+8. [Convenciones de Código](#convenciones-de-código)
+9. [Estructura de Archivos](#estructura-de-archivos)
+10. [Workflow SDD](#workflow-sdd)
+11. [Reglas de Negocio Clave](#reglas-de-negocio-clave)
+12. [Integración MercadoPago](#integración-mercadopago)
+13. [Gemas del Proyecto](#gemas-del-proyecto)
+14. [SDD Multi-Agent Delegation System](#sdd-multi-agent-delegation-system)
+
+---
+
+## 📚 Documentación del Sistema
+
+Antes de proponer, diseñar o implementar cualquier cambio, leé la documentación modular desde `openspec/docs/index.md`:
+
+1. Abrí `openspec/docs/index.md` — es el **mapa completo** de toda la documentación
+2. Desde ahí navegá al archivo específico que necesités (descripción, historias, integrador)
+3. **No leas los archivos monolíticos** `docs/Descripcion.txt`, `docs/Integrador.txt` ni `docs/Historias_de_usuario.txt` — su contenido ya está dividido en `openspec/docs/`
+
+Los archivos fuente originales están en `docs/` pero la documentación modular en `openspec/docs/` es la que debe usar el agente. Si necesitás una sección específica (ej: reglas de autenticación, API de pedidos), buscá el archivo correspondiente en el índice en lugar de leer el documento entero.
+
+> ⚠️ Esta sección reemplaza a la referencia a los 3 archivos `docs/` que estaba en versiones anteriores.
 
 ---
 
@@ -508,20 +523,26 @@ VITE_MP_PUBLIC_KEY=TEST-xxxx
 
 ### 13.1 Principio Fundamental — PERMANENTE
 
-Para TODA tarea importante, el orchestrator DEBE delegar trabajo especializado a subagentes internos. Nunca debe manejar todas las responsabilidades solo. La delegación no es opcional — es el mecanismo principal para:
+Para TODA tarea, sin excepción, el orchestrator DEBE delegar trabajo sustantivo a subagentes internos. El orchestrator NUNCA ejecuta implementación, diseño, exploración, revisión, debugging, tareas frontend, ni ningún otro trabajo sustantivo por su cuenta. Su único rol es:
+
+1. **Analizar** el request del usuario
+2. **Coordinar** qué subagente ejecuta cada paso
+3. **Validar** consistencia final entre lo delegado y lo esperado
+
+La delegación no es opcional — es el mecanismo único y obligatorio para:
 
 - Mantener contexto enfocado y evitar contaminación de tokens
 - Garantizar revisión crítica antes de dar por terminado un cambio
 - Separar concerns arquitectónicos, de implementación y de revisión
 - Optimizar el uso de recursos en cada sub-tarea
 
-**Este principio es permanente.** Independientemente del AI orchestrator (BigPickle hoy, GitHub Copilot mañana), la delegación a subagentes siempre aplica.
+**Este principio es permanente y absoluto.** Independientemente del AI orchestrator (BigPickle hoy, GitHub Copilot mañana), la delegación a subagentes siempre aplica. No existen tareas "chicas", "simples" o "triviales" que el orchestrator pueda hacer solo. Si el trabajo implica leer, escribir, analizar o modificar código, DELEGA.
 
 ---
 
 ### 13.2 Workflow de Delegación — PERMANENTE
 
-Para TODA tarea importante, el orchestrator sigue esta secuencia:
+Para TODA tarea, el orchestrator sigue esta secuencia:
 
 ```
  1. Orchestrator analiza el request
@@ -541,6 +562,8 @@ Para TODA tarea importante, el orchestrator sigue esta secuencia:
 
 Cada paso se ejecuta con las herramientas disponibles en el entorno (`task`, `delegate`, `skill`, etc.). Lo importante es la **secuencia**, no el mecanismo específico.
 
+Los pasos 2, 4, 5 y 6 son SIEMPRE ejecutados por subagentes. El orchestrator NUNCA los ejecuta directamente.
+
 ---
 
 ### 13.3 Subagentes Actuales — TEMPORAL
@@ -550,9 +573,9 @@ Cada paso se ejecuta con las herramientas disponibles en el entorno (`task`, `de
 | Subagente | Rol | Propósito | Uso Obligatorio |
 |-----------|-----|-----------|-----------------|
 | **BigPickle** | SDD Orchestrator | Coordinación, workflow, token optimization, validación de consistencia | Siempre — entry point de todo request |
-| **Nemotron 3 Super** | Architect | Análisis arquitectónico, validación de dependencias, planificación, escalabilidad | Antes de implementaciones complejas, cambios arquitectónicos, nuevas dependencias, refactors grandes |
-| **DeepSeek** | Reviewer & Debug | Bug detection, edge cases, lógica, seguridad, maintainabilidad | Después de implementaciones importantes, lógica backend, modificaciones de negocio, debugging |
-| **Hy3 Preview** | Frontend/UI | UI consistency, UX improvements, responsive layouts, estilos | Durante tareas frontend, modificaciones UI, estilos, mejoras UX |
+| **Nemotron 3 Super** | Architect | Análisis arquitectónico, validación de dependencias, planificación, escalabilidad | Siempre — antes de cualquier implementación o cambio arquitectónico |
+| **DeepSeek** | Reviewer & Debug | Bug detection, edge cases, lógica, seguridad, maintainabilidad | Siempre — después de toda implementación, modificación de negocio, o debugging |
+| **Hy3 Preview** | Frontend/UI | UI consistency, UX improvements, responsive layouts, estilos | Siempre — en TODA tarea frontend, modificación UI, estilos, o mejora UX |
 
 #### Tool Mapping
 
@@ -571,6 +594,7 @@ Cada paso se ejecuta con las herramientas disponibles en el entorno (`task`, `de
 - Delegar trabajo exploratorio a subagentes para reducir contaminación de contexto principal
 - Reutilizar estructuras y patrones existentes del repositorio
 - Priorizar outputs concisos y mantenibles
+- **Nunca ejecutar trabajo sustantivo directamente** — si la tarea implica leer, escribir, analizar o modificar código, delegar siempre
 
 ---
 
@@ -585,7 +609,7 @@ El sistema de delegación opera DENTRO del workflow OPSX existente. Los comandos
 /opsx:archive  →  Orchestrator (consistencia)
 ```
 
-El sistema de delegación es una optimización interna que el orchestrator aplica automáticamente.
+El sistema de delegación es OBLIGATORIO — el orchestrator nunca ejecuta trabajo sustantivo por su cuenta. El orchestrator aplica automáticamente este sistema en cada interacción.
 
 ---
 

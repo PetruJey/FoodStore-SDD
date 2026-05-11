@@ -2,6 +2,8 @@
 
 Este directorio contiene la documentación completa del sistema Food Store, modularizada en archivos Markdown independientes para que los changes de OPSX puedan referenciar secciones específicas sin leer archivos monolíticos.
 
+> **⚠️ Entry point oficial**: Este archivo es la puerta de entrada a la documentación del sistema. Los agentes IA deben leer **este índice** (`openspec/docs/index.md`) y navegar al archivo específico que necesiten, en lugar de leer los archivos monolíticos de `docs/`.
+>
 > **Origen**: Los archivos fuente originales están en `docs/` (`Descripcion.txt`, `Historias_de_usuario.txt`, `Integrador.txt`).
 > Los archivos en `openspec/docs/` son una división uno-a-uno del contenido original, sin modificaciones.
 

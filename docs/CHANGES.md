@@ -10,57 +10,21 @@ Este documento establece el mapa completo de changes para desarrollar Food Store
 
 ### change-setup-project-structure
 
-**Funcionalidad**: Scaffolding del monorepo con estructura backend (feature-first) y frontend (Feature-Sliced Design).
+**Funcionalidad**: Scaffolding completo del monorepo: backend FastAPI con estructura feature-first, frontend React+Vite+TypeScript con Feature-Sliced Design, base de datos PostgreSQL con Alembic, patrones base (BaseRepository, Unit of Work, JWT), stores Zustand y cliente HTTP con interceptores.
 
 **Historias de usuario**:
 - US-000: Inicialización del repositorio y estructura del proyecto
-
-**Dependencias**: Ninguna (fundacional)
-
-**Justificación**: Sin estructura de carpetas, el equipo no tiene dónde escribir código de forma consistente. Establece las convenciones que todo el código posterior seguirá.
-
----
-
-### change-setup-backend
-
-**Funcionalidad**: Configuración del entorno backend con FastAPI, SQLModel, BaseRepository, Unit of Work, middleware de errores y validación.
-
-**Historias de usuario**:
 - US-000a: Configuración del entorno backend (FastAPI + dependencias)
+- US-000b: Configuración de PostgreSQL, migraciones y seed data
+- US-000c: Configuración del entorno frontend (React + Vite + dependencias)
 - US-000d: Implementación de patrones base (BaseRepository, Unit of Work, dependencias FastAPI)
+- US-000e: Configuración de los stores de Zustand (authStore, cartStore)
 - US-068: Manejo de errores estandarizado en backend
 - US-074: Validación y sanitización de inputs
 
-**Dependencias**: change-setup-project-structure
+**Dependencias**: Ninguna (fundacional)
 
-**Justificación**: Los patrones BaseRepository y Unit of Work son la fundación de todo acceso a datos. Sin atomicidad en transacciones, el sistema no puede garantizar consistencia.
-
----
-
-### change-setup-database
-
-**Funcionalidad**: PostgreSQL con migraciones Alembic, modelos SQLModel y script de seed (roles, estados de pedido, formas de pago, usuario admin).
-
-**Historias de usuario**:
-- US-000b: Configuración de PostgreSQL, migraciones y seed data
-
-**Dependencias**: change-setup-backend
-
-**Justificación**: Sin seed data, no existen los roles, estados ni formas de pago que todo el sistema necesita. Los IDs de seed deben ser estables para referenciarlos en código.
-
----
-
-### change-setup-frontend
-
-**Funcionalidad**: Configuración del frontend con React, TypeScript, Vite, TanStack Query, Axios con interceptores JWT y Zustand stores base.
-
-**Historias de usuario**:
-- US-000c: Configuración del entorno frontend (React + Vite + dependencias)
-- US-000e: Configuración de los stores de Zustand (authStore, cartStore, paymentStore, uiStore)
-
-**Dependencias**: change-setup-project-structure
-
-**Justificación**: Los cuatro stores de Zustand son la fundación del estado del cliente. Sin interceptor JWT, no hay forma de hacer requests autenticados.
+**Justificación**: Sin estructura de carpetas, el equipo no tiene dónde escribir código de forma consistente. Establece las convenciones que todo el código posterior seguirá. Unifica los componentes de infraestructura porque todos son prerequisitos simultáneos para cualquier feature.
 
 ---
 
@@ -386,7 +350,7 @@ Este documento establece el mapa completo de changes para desarrollar Food Store
 
 | Sprint | Changes | Historias |
 |--------|---------|----------|
-| **0** | setup-project-structure, setup-backend, setup-database, setup-frontend | US-000, US-000a, US-000b, US-000c, US-000d, US-000e, US-068, US-074 |
+| **0** | setup-project-structure | US-000, US-000a, US-000b, US-000c, US-000d, US-000e, US-068, US-074 |
 | **1** | auth-module, rbac-module, frontend-navigation | US-001 a US-006, US-073, US-075, US-076, US-066, US-067 |
 | **2** | categories-crud, ingredients-crud | US-007 a US-014 |
 | **3** | products-crud, client-profile | US-015 a US-023, US-061 a US-063 |
@@ -396,7 +360,7 @@ Este documento establece el mapa completo de changes para desarrollar Food Store
 | **7** | order-viewing, order-feedback | US-049 a US-052, US-071, US-072 |
 | **8** | admin-user-management, admin-catalog, admin-dashboard, system-configuration | US-053 a US-060 |
 
-**Total: 20 changes, 77 historias de usuario**
+**Total: 17 changes, 77 historias de usuario**
 
 ---
 
@@ -405,40 +369,61 @@ Este documento establece el mapa completo de changes para desarrollar Food Store
 ```
 Sprint 0
 │
-├───► setup-project-structure
-│         │
-│         ├───► setup-backend ──► setup-database
-│         │                           │
-│         │                           ├───► auth-module ──► rbac-module
-│         │                           │                    │
-│         │                           │                    ├──► categories-crud
-│         │                           │                    │
-│         │                           │                    ├──► ingredients-crud
-│         │                           │                    │
-│         │                           │                    └──► client-profile
-│         │                           │
-│         │                           └──► delivery-addresses
-│         │
-│         └──► setup-frontend ──► shopping-cart
-│                                           │
-│                                           └───► checkout-validation
-│                                                       │
-│                                                       └───► order-creation
-│                                                                   │
-│                                                                   ├──► mercadopago-integration
-│                                                                   │
-│                                                                   ├──► order-fsm
-│                                                                   │
-│                                                                   └──► order-viewing
-│                                                                       │
-│                                                                       └──► order-feedback
-│
-│
-│  (Sprint 8 admin cambios dependendechanges base)
-│
+└───► setup-project-structure
+            │
+            ├───► auth-module ──► rbac-module
+            │                    │
+            │                    ├──► categories-crud
+            │                    │
+            │                    ├──► ingredients-crud
+            │                    │
+            │                    └──► client-profile
+            │
+            ├──► delivery-addresses
+            │
+            └──► shopping-cart ──► checkout-validation
+                                          │
+                                          └───► order-creation
+                                                       │
+                                                       ├──► mercadopago-integration
+                                                       │
+                                                       ├──► order-fsm
+                                                       │
+                                                       └──► order-viewing
+                                                           │
+                                                           └──► order-feedback
+
+(Sprint 8 admin changes dependen de changes base)
 ```
 
 ---
+
+## Formato de Seguimiento de Tareas
+
+Cada change usa una **tabla de estados** en su `tasks.md` para tracking visual y preciso del progreso:
+
+| Estado | Símbolo | Significado |
+|--------|---------|-------------|
+| ✅ Realizada | Completada | Tarea sólida, verificada, sin margen de error |
+| 🔄 En Desarrollo | Activa | Tarea en la que se está trabajando AHORA |
+| ⬜ Vacía | Pendiente | Tarea sin iniciar |
+
+### Reglas del Formato
+
+- **Una tarea a la vez**: Solo una tarea puede estar en 🔄 En Desarrollo en todo momento. Nunca se trabajan dos tareas en paralelo.
+- **Sin atajos**: Una tarea no puede pasar de ⬜ Vacía a ✅ Realizada sin pasar por 🔄 En Desarrollo.
+- **Desarrollo sólido**: ✅ Realizada significa que la tarea está verificada — el código compila, el archivo existe con el contenido correcto, no hay placeholders ni "TODO". Si hay margen de error, no está realizada.
+- **Subdivisión inteligente**: Tareas grandes (ej: "inicializar proyecto Vite") se subdividen en pasos más pequeños. Tareas de un solo archivo se mantienen como están para no alargar la lista innecesariamente.
+
+### Estructura de la Tabla
+
+```
+| # | Tarea | Estado |
+|---|-------|--------|
+| 1.1 | Crear estructura de directorios backend | ⬜ Vacía |
+| 1.2 | Crear `app/main.py` con FastAPI app | 🔄 En Desarrollo |
+| 1.3 | Crear `app/core/config.py` | ⬜ Vacía |
+```
 
 ## Reglas de Implementación
 
@@ -446,6 +431,10 @@ Sprint 0
 
 2. **El orden importa.** Si el change B necesita código del change A, A debe estar archivado antes de proponer B.
 
-3. **Un change = un commit** (o varios commits atómicos). Nunca mezcles dos changes en un mismo commit.
+3. **Tarea por tarea, nunca change completo.** Se implementa una sola tarea a la vez. Se completa (✅), se verifica, y recién ahí se pasa a la siguiente. Nunca se trabajan dos tareas en simultáneo, ni se delegan múltiples tareas en paralelo.
 
-4. **Las specs son código.** Se versionan en git, se revisan en PRs, evolucionan con el proyecto.
+4. **Un change = un commit** (o varios commits atómicos). Nunca mezcles dos changes en un mismo commit.
+
+5. **Las specs son código.** Se versionan en git, se revisan en PRs, evolucionan con el proyecto.
+
+6. **El tasks.md es la fuente de verdad del progreso.** Refleja el estado exacto de cada tarea (✅/🔄/⬜) en todo momento, y se actualiza inmediatamente después de cada cambio de estado.
