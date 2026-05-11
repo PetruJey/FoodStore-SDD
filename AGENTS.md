@@ -29,6 +29,8 @@ Antes de proponer, diseñar o implementar cualquier cambio, leé la documentaci�
 
 Los archivos fuente originales están en `docs/` pero la documentación modular en `openspec/docs/` es la que debe usar el agente. Si necesitás una sección específica (ej: reglas de autenticación, API de pedidos), buscá el archivo correspondiente en el índice en lugar de leer el documento entero.
 
+Además, **`docs/CHANGES.md`** contiene el mapa completo de épicas con versiones, dependencias y palabras clave para `/opsx:propose`. Es la hoja de ruta de implementación — consultalo antes de empezar cualquier change para entender qué sigue y de qué depende.
+
 > ⚠️ Esta sección reemplaza a la referencia a los 3 archivos `docs/` que estaba en versiones anteriores.
 
 ---
@@ -40,7 +42,7 @@ Los archivos fuente originales están en `docs/` pero la documentación modular 
 - **5 actores**: Cliente, Admin, Gestor de Stock, Gestor de Pedidos, Sistema
 - **Funcionalidades principales**: catálogo de productos, carrito de compras, pedidos con FSM de 6 estados, pagos con MercadoPago, panel de administración
 - **Metodología**: Spec-Driven Development (SDD) con cambios atómicos
-- **Total de historias de usuario**: 77 (US-000 a US-060)
+- **Total de historias de usuario**: 77 (US-000 a US-076, incluyendo sub-letras como US-000a-e)
 
 ---
 
@@ -319,7 +321,11 @@ frontend/
 
 ## Workflow SDD
 
-### Comando SDD en este proyecto
+### Hoja de ruta
+
+Antes de proponer cualquier change, consultá **`docs/CHANGES.md`** — contiene el mapa completo de épicas con versiones, dependencias y el orden de implementación. Cada épica tiene una palabra clave para usar con `/opsx:propose`.
+
+### Comandos SDD en este proyecto
 
 ```bash
 # Ver estado actual

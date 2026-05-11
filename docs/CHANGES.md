@@ -2,374 +2,282 @@
 
 ## Introducción
 
-Este documento establece el mapa completo de changes para desarrollar Food Store de principio a fin, organizado por Sprint según el plan de implementación recomendado. Cada change representa una unidad de trabajo atómica que agrupa historias de usuario relacionadas con sus dependencias claras.
+Este documento establece el mapa completo de Épicas para desarrollar **Food Store** de principio a fin, organizado por Sprint. Cada Épica tiene su propia **versión** y **palabra clave** (change name) para ejecutar el workflow OPSX de forma ordenada y paso a paso.
+
+### Cómo usar este mapa
+
+Cada Épica es una unidad de trabajo atómica que se implementa con el ritual OPSX completo:
+
+```bash
+/opsx:propose <palabra-clave>   # Crear proposal + design + tasks
+/opsx:apply <palabra-clave>      # Implementar tareas una por una
+/opsx:archive <palabra-clave>    # Sincronizar specs + commitear + archivar
+```
+
+Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada y pusheada.
 
 ---
 
 ## Sprint 0 — Infraestructura y Setup
 
-### change-setup-project-structure
+- [x] **v0.1 — Proyecto Base** → `change-setup-project-structure`
 
-**Funcionalidad**: Scaffolding completo del monorepo: backend FastAPI con estructura feature-first, frontend React+Vite+TypeScript con Feature-Sliced Design, base de datos PostgreSQL con Alembic, patrones base (BaseRepository, Unit of Work, JWT), stores Zustand y cliente HTTP con interceptores.
+  `/opsx:propose change-setup-project-structure`
 
-**Historias de usuario**:
-- US-000: Inicialización del repositorio y estructura del proyecto
-- US-000a: Configuración del entorno backend (FastAPI + dependencias)
-- US-000b: Configuración de PostgreSQL, migraciones y seed data
-- US-000c: Configuración del entorno frontend (React + Vite + dependencias)
-- US-000d: Implementación de patrones base (BaseRepository, Unit of Work, dependencias FastAPI)
-- US-000e: Configuración de los stores de Zustand (authStore, cartStore)
-- US-068: Manejo de errores estandarizado en backend
-- US-074: Validación y sanitización de inputs
+  **Funcionalidad**: Scaffolding completo del monorepo: backend FastAPI con estructura feature-first, frontend React+Vite+TypeScript con FSD, PostgreSQL con Alembic, patrones base (BaseRepository, Unit of Work, JWT), stores Zustand y cliente HTTP con interceptores.
 
-**Dependencias**: Ninguna (fundacional)
+  **Historias**: US-000, US-000a, US-000b, US-000c, US-000d, US-000e, US-068, US-074
 
-**Justificación**: Sin estructura de carpetas, el equipo no tiene dónde escribir código de forma consistente. Establece las convenciones que todo el código posterior seguirá. Unifica los componentes de infraestructura porque todos son prerequisitos simultáneos para cualquier feature.
+  **Dependencias**: Ninguna (fundacional)
 
 ---
 
 ## Sprint 1 — Autenticación, Autorización y Navegación
 
-### change-auth-module
+- [ ] **v1.0 — Módulo de Autenticación** → `change-auth-module`
 
-**Funcionalidad**: Módulo de autenticación completo: registro, login, refresh token con rotación, logout.
+  `/opsx:propose change-auth-module`
 
-**Historias de usuario**:
-- US-001: Registro de cliente
-- US-002: Login de usuario
-- US-003: Refresh de token
-- US-004: Logout
+  **Funcionalidad**: Módulo de autenticación completo: registro, login, refresh token con rotación, logout.
 
-**Dependencias**: change-setup-database
+  **Historias**: US-001, US-002, US-003, US-004
 
-**Justificación**: La autenticación es la puerta de entrada. El refresh con rotación (RN-AU04) es obligatorio por seguridad. El logout debe invalidar el token en BD.
+  **Dependencias**: change-setup-database
 
----
+- [ ] **v1.1 — Control de Acceso RBAC** → `change-rbac-module`
 
-### change-rbac-module
+  `/opsx:propose change-rbac-module`
 
-**Funcionalidad**: Sistema RBAC: asignación de roles, verificación por endpoint, rate limiting en login.
+  **Funcionalidad**: Sistema RBAC: asignación de roles, verificación por endpoint, rate limiting en login.
 
-**Historias de usuario**:
-- US-005: Gestión de roles (RBAC)
-- US-006: Protección de rutas por rol
-- US-073: Rate limiting en endpoints sensibles
+  **Historias**: US-005, US-006, US-073
 
-**Dependencias**: change-auth-module
+  **Dependencias**: change-auth-module
 
-**Justificación**: Sin RBAC, cualquier usuario puede acceder a cualquier recurso. Los cuatro roles (ADMIN, STOCK, PEDIDOS, CLIENT) deben estar protegidos por sensibilidad.
+- [ ] **v1.2 — Navegación Frontend** → `change-frontend-navigation`
 
----
+  `/opsx:propose change-frontend-navigation`
 
-### change-frontend-navigation
+  **Funcionalidad**: Navegación adaptada al rol, guards de autenticación, manejo de token expirado y errores globales.
 
-**Funcionalidad**: Navegación adaptada al rol, guards de autenticación, manejo de token expirado y errores globales.
+  **Historias**: US-075, US-076, US-066, US-067
 
-**Historias de usuario**:
-- US-075: Navegación por rol
-- US-076: Protección de rutas en frontend
-- US-066: Manejo de token expirado en frontend
-- US-067: Manejo de errores global en frontend
-
-**Dependencias**: change-auth-module, change-rbac-module, change-setup-frontend
-
-**Justificación**: El menú debe mostrar solo opciones del rol. El interceptor de 401 con refresh evita que el usuario pierda sesión por expiración.
+  **Dependencias**: change-auth-module, change-rbac-module, change-setup-frontend
 
 ---
 
 ## Sprint 2 — Catálogo: Categorías e Ingredientes
 
-### change-categories-crud
+- [ ] **v2.0 — CRUD de Categorías** → `change-categories-crud`
 
-**Funcionalidad**: CRUD de categorías con soporte jerárquico (CTE recursivo), soft delete y validación de ciclos.
+  `/opsx:propose change-categories-crud`
 
-**Historias de usuario**:
-- US-007: Crear categoría
-- US-008: Listar categorías jerárquicas
-- US-009: Editar categoría
-- US-010: Eliminar categoría (soft delete)
+  **Funcionalidad**: CRUD de categorías con soporte jerárquico (CTE recursivo), soft delete y validación de ciclos.
 
-**Dependencias**: change-setup-database, change-rbac-module
+  **Historias**: US-007, US-008, US-009, US-010
 
-**Justificación**: Las categorías son la base del catálogo. La jerarquía (RN-CA01) y validación de ciclos (RN-CA02) son requerimientos del dominio.
+  **Dependencias**: change-setup-database, change-rbac-module
 
----
+- [ ] **v2.1 — CRUD de Ingredientes** → `change-ingredients-crud`
 
-### change-ingredients-crud
+  `/opsx:propose change-ingredients-crud`
 
-**Funcionalidad**: CRUD de ingredientes con campo es_alergeno para identificar alérgenos.
+  **Funcionalidad**: CRUD de ingredientes con campo `es_alergeno` para identificar alérgenos.
 
-**Historias de usuario**:
-- US-011: Crear ingrediente
-- US-012: Listar ingredientes
-- US-013: Editar ingrediente
-- US-014: Eliminar ingrediente (soft delete)
+  **Historias**: US-011, US-012, US-013, US-014
 
-**Dependencias**: change-setup-database, change-rbac-module
-
-**Justificación**: Los ingredientes con flag es_alergeno son críticos para que clientes con restricciones dietarias filtren productos (US-023).
+  **Dependencias**: change-setup-database, change-rbac-module
 
 ---
 
 ## Sprint 3 — Catálogo: Productos y Perfil del Cliente
 
-### change-products-crud
+- [ ] **v3.0 — CRUD de Productos** → `change-products-crud`
 
-**Funcionalidad**: CRUD de productos, asociación a categorías e ingredientes, stock, catálogo público y filtros por alérgenos.
+  `/opsx:propose change-products-crud`
 
-**Historias de usuario**:
-- US-015: Crear producto
-- US-016: Asociar producto a categorías
-- US-017: Associar ingredientes a producto
-- US-018: Listar productos del catálogo (público)
-- US-019: Ver detalle de producto
-- US-020: Editar producto
-- US-021: Gestionar stock de producto
-- US-022: Eliminar producto (soft delete)
-- US-023: Filtrar productos por alérgenos
+  **Funcionalidad**: CRUD de productos, asociación a categorías e ingredientes, stock, catálogo público y filtros por alérgenos.
 
-**Dependencias**: change-setup-database, change-categories-crud, change-ingredients-crud, change-rbac-module
+  **Historias**: US-015, US-016, US-017, US-018, US-019, US-020, US-021, US-022, US-023
 
-**Justificación**: El producto es la entidad central del e-commerce. Las asociaciones M2M permiten navegación y filtrado. El stock gestiona disponibilidad.
+  **Dependencias**: change-setup-database, change-categories-crud, change-ingredients-crud, change-rbac-module
 
----
+- [ ] **v3.1 — Perfil del Cliente** → `change-client-profile`
 
-### change-client-profile
+  `/opsx:propose change-client-profile`
 
-**Funcionalidad**: Gestión del perfil del cliente: ver, editar datos personales y cambiar contraseña.
+  **Funcionalidad**: Gestión del perfil del cliente: ver, editar datos personales y cambiar contraseña.
 
-**Historias de usuario**:
-- US-061: Ver perfil propio
-- US-062: Editar perfil propio
-- US-063: Cambiar contraseña
+  **Historias**: US-061, US-062, US-063
 
-**Dependencias**: change-auth-module
-
-**Justificación**: El cliente debe mantener sus datos actualizados. El email no es editable (es el identificador). El cambio de contraseña debe invalidar todos los refresh tokens.
+  **Dependencias**: change-auth-module
 
 ---
 
 ## Sprint 4 — Carrito y Direcciones
 
-### change-delivery-addresses
+- [ ] **v4.0 — Direcciones de Entrega** → `change-delivery-addresses`
 
-**Funcionalidad**: CRUD de direcciones de entrega con dirección predeterminada por usuario.
+  `/opsx:propose change-delivery-addresses`
 
-**Historias de usuario**:
-- US-024: Crear dirección de entrega
-- US-025: Listar direcciones del cliente
-- US-026: Editar dirección de entrega
-- US-027: Eliminar dirección de entrega
-- US-028: Establecer dirección predeterminada
+  **Funcionalidad**: CRUD de direcciones de entrega con dirección predeterminada por usuario.
 
-**Dependencias**: change-setup-database, change-auth-module
+  **Historias**: US-024, US-025, US-026, US-027, US-028
 
-**Justificación**: La dirección es obligatoria para crear pedido. El snapshot (RN-PE03) preserva los datos al momento de la compra.
+  **Dependencias**: change-setup-database, change-auth-module
 
----
+- [ ] **v4.1 — Carrito de Compras** → `change-shopping-cart`
 
-### change-shopping-cart
+  `/opsx:propose change-shopping-cart`
 
-**Funcionalidad**: Carrito client-side con Zustand: agregar, personalizar (excluir ingredientes), modificar cantidades, eliminar, ver resumen, vaciar.
+  **Funcionalidad**: Carrito client-side con Zustand: agregar, personalizar (excluir ingredientes), modificar cantidades, eliminar, ver resumen, vaciar.
 
-**Historias de usuario**:
-- US-029: Agregar producto al carrito
-- US-030: Personalizar producto (exclusión de ingredientes)
-- US-031: Modificar cantidad de item en el carrito
-- US-032: Eliminar item del carrito
-- US-033: Ver resumen del carrito
-- US-034: Vaciar carrito
+  **Historias**: US-029, US-030, US-031, US-032, US-033, US-034
 
-**Dependencias**: change-products-crud, change-ingredients-crud, change-setup-frontend
-
-**Justificación**: El carrito es client-side only (RN-CR01). La persistencia en localStorage permite que sobreviva al cierre del navegador.
+  **Dependencias**: change-products-crud, change-ingredients-crud, change-setup-frontend
 
 ---
 
 ## Sprint 5 — Creación de Pedidos
 
-### change-checkout-validation
+- [ ] **v5.0 — Validación de Checkout** → `change-checkout-validation`
 
-**Funcionalidad**: Validaciones previas al checkout: disponibilidad de stock y detección de cambios de precio.
+  `/opsx:propose change-checkout-validation`
 
-**Historias de usuario**:
-- US-069: Validar disponibilidad al hacer checkout
-- US-070: Verificar precios actualizados al hacer checkout
+  **Funcionalidad**: Validaciones previas al checkout: disponibilidad de stock y detección de cambios de precio.
 
-**Dependencias**: change-shopping-cart, change-products-crud
+  **Historias**: US-069, US-070
 
-**Justificación**: Estas validacionesprevienen errores en el momento crítico. Si el stock cambió o el precio aumentó, el cliente debe saberlo antes de pagar.
+  **Dependencias**: change-shopping-cart, change-products-crud
 
----
+- [ ] **v5.1 — Creación Atómica de Pedidos** → `change-order-creation`
 
-### change-order-creation
+  `/opsx:propose change-order-creation`
 
-**Funcionalidad**: Creación atómica de pedidos con Unit of Work, snapshots de precios y dirección, validación de stock dentro de la transacción.
+  **Funcionalidad**: Creación atómica de pedidos con Unit of Work, snapshots de precios y dirección, validación de stock dentro de la transacción.
 
-**Historias de usuario**:
-- US-035: Crear pedido desde el carrito
-- US-036: Validación de stock al crear pedido
-- US-037: Snapshot de precios en el pedido
-- US-038: Snapshot de dirección en el pedido
+  **Historias**: US-035, US-036, US-037, US-038
 
-**Dependencias**: change-setup-backend, change-shopping-cart, change-delivery-addresses, change-checkout-validation
-
-**Justificación**: Este es el cambio más complejo. La atomicidad (RN-PE01) garantiza que o todo persiste o nada. Los snapshots preservan datos inmutables.
+  **Dependencias**: change-setup-backend, change-shopping-cart, change-delivery-addresses, change-checkout-validation
 
 ---
 
 ## Sprint 6 — Pagos y FSM de Pedidos
 
-### change-mercadopago-integration
+- [ ] **v6.0 — Integración MercadoPago** → `change-mercadopago-integration`
 
-**Funcionalidad**: Integración con MercadoPago: creación de preferencia, webhook IPN, procesamiento de estados y reintentos.
+  `/opsx:propose change-mercadopago-integration`
 
-**Historias de usuario**:
-- US-045: Iniciar proceso de pago
-- US-046: Procesar webhook de pago (IPN)
-- US-047: Consultar estado de pago
-- US-048: Reintentar pago rechazado
+  **Funcionalidad**: Integración con MercadoPago: creación de preferencia, webhook IPN, procesamiento de estados y reintentos.
 
-**Dependencias**: change-order-creation, change-setup-database
+  **Historias**: US-045, US-046, US-047, US-048
 
-**Justificación**: La integración con MercadoPago es el corazón del flujo de compra. Los webhooks actualizan el estado y disparan transiciones automáticas.
+  **Dependencias**: change-order-creation, change-setup-database
 
----
+- [ ] **v6.1 — Máquina de Estados del Pedido** → `change-order-fsm`
 
-### change-order-fsm
+  `/opsx:propose change-order-fsm`
 
-**Funcionalidad**: Máquina de estados de pedidos: transiciones, decremento/restauración de stock, cancelaciones y auditoría append-only.
+  **Funcionalidad**: Máquina de estados de pedidos: transiciones, decremento/restauración de stock, cancelaciones y auditoría append-only.
 
-**Historias de usuario**:
-- US-039: Transición PENDIENTE a CONFIRMADO
-- US-040: Transición CONFIRMADO a EN_PREPARACION
-- US-041: Transición EN_PREPARACION a EN_CAMINO
-- US-042: Transición EN_CAMINO a ENTREGADO
-- US-043: Cancelar pedido
-- US-044: Auditoría de cambios de estado
+  **Historias**: US-039, US-040, US-041, US-042, US-043, US-044
 
-**Dependencias**: change-order-creation, change-mercadopago-integration
-
-**Justificación**: La FSM garantiza transicionesinválidas se rechacen. El decremento de stock (RN-FS03) y su restauración (RN-FS05) mantienen integridad del inventario. El historial append-only proporciona trazabilidad.
+  **Dependencias**: change-order-creation, change-mercadopago-integration
 
 ---
 
 ## Sprint 7 — Visualización de Pedidos y Feedback
 
-### change-order-viewing
+- [ ] **v7.0 — Visualización de Pedidos** → `change-order-viewing`
 
-**Funcionalidad**: Visualización de pedidos: historial del cliente, detalle propio, panel de gestión para Gestor de Pedidos.
+  `/opsx:propose change-order-viewing`
 
-**Historias de usuario**:
-- US-049: Ver mis pedidos (Cliente)
-- US-050: Ver detalle de mi pedido (Cliente)
-- US-051: Ver todos los pedidos (Gestor de Pedidos)
-- US-052: Ver detalle de cualquier pedido (Gestor/Admin)
+  **Funcionalidad**: Visualización de pedidos: historial del cliente, detalle propio, panel de gestión para Gestor de Pedidos.
 
-**Dependencias**: change-order-creation, change-order-fsm, change-rbac-module
+  **Historias**: US-049, US-050, US-051, US-052
 
-**Justificación**: El cliente solo ve sus propios pedidos. El Gestor necesita ver todos para gestionar el flujo.
+  **Dependencias**: change-order-creation, change-order-fsm, change-rbac-module
 
----
+- [ ] **v7.1 — Feedback de Pedido y Pago** → `change-order-feedback`
 
-### change-order-feedback
+  `/opsx:propose change-order-feedback`
 
-**Funcionalidad**: Feedback visual: confirmación de pedido creado y resultado del pago al retornar de MercadoPago.
+  **Funcionalidad**: Feedback visual: confirmación de pedido creado y resultado del pago al retornar de MercadoPago.
 
-**Historias de usuario**:
-- US-071: Confirmación de pedido creado
-- US-072: Feedback de estado de pago
+  **Historias**: US-071, US-072
 
-**Dependencias**: change-order-creation, change-mercadopago-integration
-
-**Justificación**: La confirmaciónda certeza al cliente. El feedback al retornar de MP indica si debe reintentar o si fue exitoso.
+  **Dependencias**: change-order-creation, change-mercadopago-integration
 
 ---
 
 ## Sprint 8 — Administración
 
-### change-admin-user-management
+- [ ] **v8.0 — Gestión de Usuarios** → `change-admin-user-management`
 
-**Funcionalidad**: Panel de gestión de usuarios: listado, edición de roles, activación/desactivación.
+  `/opsx:propose change-admin-user-management`
 
-**Historias de usuario**:
-- US-053: Listar usuarios del sistema
-- US-054: Editar usuario (Admin)
-- US-055: Desactivar usuario
+  **Funcionalidad**: Panel de gestión de usuarios: listado, edición de roles, activación/desactivación.
 
-**Dependencias**: change-auth-module, change-rbac-module, change-setup-database
+  **Historias**: US-053, US-054, US-055
 
-**Justificación**: El admin gestiona usuarios del sistema. No puede degradarse al último admin (RN-RB04). La desactivación invalida todos los refresh tokens.
+  **Dependencias**: change-auth-module, change-rbac-module, change-setup-database
 
----
+- [ ] **v8.1 — Gestión Completa de Catálogo y Pedidos** → `change-admin-catalog`
 
-### change-admin-catalog
+  `/opsx:propose change-admin-catalog`
 
-**Funcionalidad**: Acceso completo del Admin al catálogo y pedidos: privilegios completos sobre todos los módulos.
+  **Funcionalidad**: Acceso completo del Admin al catálogo y pedidos: privilegios completos sobre todos los módulos.
 
-**Historias de usuario**:
-- US-064: Gestión completa de catálogo (Admin)
-- US-065: Gestión completa de pedidos (Admin)
+  **Historias**: US-064, US-065
 
-**Dependencias**: change-products-crud, change-categories-crud, change-order-viewing
+  **Dependencias**: change-products-crud, change-categories-crud, change-order-viewing
 
-**Justificación**: El admin debe poder intervenir en cualquier módulo sin depender de otros roles.
+- [ ] **v8.2 — Dashboard de Métricas** → `change-admin-dashboard`
 
----
+  `/opsx:propose change-admin-dashboard`
 
-### change-admin-dashboard
+  **Funcionalidad**: Dashboard de métricas: KPIs, evolución de ventas, ranking de productos, distribución por estado.
 
-**Funcionalidad**: Dashboard de métricas: KPIs, evolución de ventas, ranking de productos, distribución por estado.
+  **Historias**: US-056, US-057, US-058, US-059
 
-**Historias de usuario**:
-- US-056: Dashboard de métricas generales
-- US-057: Gráfico de ventas por período
-- US-058: Top productos más vendidos
-- US-059: Métricas de pedidos por estado
+  **Dependencias**: change-order-creation, change-admin-user-management
 
-**Dependencias**: change-order-creation, change-admin-user-management
+- [ ] **v8.3 — Configuración del Sistema** → `change-system-configuration`
 
-**Justificación**: El dashboard proporciona visibilidad del negocio para tomar decisiones. Las métricas usan consultas de agregación.
+  `/opsx:propose change-system-configuration`
 
----
+  **Funcionalidad**: Panel de configuración del sistema: parámetros operativos editables por el ADMIN.
 
-### change-system-configuration
+  **Historias**: US-060
 
-**Funcionalidad**: Panel de configuración del sistema: parámetros operativos editables por el ADMIN.
-
-**Historias de usuario**:
-- US-060: Configuración del sistema
-
-**Dependencias**: change-setup-database
-
-**Justificación**: Permite ajustar parámetros sin cambiar código. Registra quién modificó qué y cuándo. Es el change de menor prioridad.
+  **Dependencias**: change-setup-database
 
 ---
 
 ## Resumen por Sprint
 
-| Sprint | Changes | Historias |
-|--------|---------|----------|
-| **0** | setup-project-structure | US-000, US-000a, US-000b, US-000c, US-000d, US-000e, US-068, US-074 |
-| **1** | auth-module, rbac-module, frontend-navigation | US-001 a US-006, US-073, US-075, US-076, US-066, US-067 |
-| **2** | categories-crud, ingredients-crud | US-007 a US-014 |
-| **3** | products-crud, client-profile | US-015 a US-023, US-061 a US-063 |
-| **4** | delivery-addresses, shopping-cart | US-024 a US-034 |
-| **5** | checkout-validation, order-creation | US-035 a US-038, US-069, US-070 |
-| **6** | mercadopago-integration, order-fsm | US-039 a US-048 |
-| **7** | order-viewing, order-feedback | US-049 a US-052, US-071, US-072 |
-| **8** | admin-user-management, admin-catalog, admin-dashboard, system-configuration | US-053 a US-060 |
+| Sprint | Épicas | Versiones | Historias |
+|--------|--------|-----------|-----------|
+| **0** ✅ | setup-project-structure | v0.1 | US-000, US-000a-e, US-068, US-074 |
+| **1** | auth-module, rbac-module, frontend-navigation | v1.0 — v1.2 | US-001 a US-006, US-073, US-075, US-076, US-066, US-067 |
+| **2** | categories-crud, ingredients-crud | v2.0 — v2.1 | US-007 a US-014 |
+| **3** | products-crud, client-profile | v3.0 — v3.1 | US-015 a US-023, US-061 a US-063 |
+| **4** | delivery-addresses, shopping-cart | v4.0 — v4.1 | US-024 a US-034 |
+| **5** | checkout-validation, order-creation | v5.0 — v5.1 | US-035 a US-038, US-069, US-070 |
+| **6** | mercadopago-integration, order-fsm | v6.0 — v6.1 | US-039 a US-048 |
+| **7** | order-viewing, order-feedback | v7.0 — v7.1 | US-049 a US-052, US-071, US-072 |
+| **8** | admin-user-management, admin-catalog, admin-dashboard, system-configuration | v8.0 — v8.3 | US-053 a US-060 |
 
-**Total: 17 changes, 77 historias de usuario**
+**Total: 17 Épicas, 77 historias de usuario**
 
 ---
 
-## Dependencias entre Changes (Topológico)
+## Dependencias entre Épicas (Topológico)
 
 ```
 Sprint 0
 │
-└───► setup-project-structure
+└───► setup-project-structure ✅
             │
             ├───► auth-module ──► rbac-module
             │                    │
@@ -393,48 +301,25 @@ Sprint 0
                                                            │
                                                            └──► order-feedback
 
-(Sprint 8 admin changes dependen de changes base)
+(Sprint 8 admin épicas dependen de changes base)
 ```
 
 ---
 
-## Formato de Seguimiento de Tareas
+## Formato de Seguimiento
 
-Cada change usa una **tabla de estados** en su `tasks.md` para tracking visual y preciso del progreso:
+Cada Épica se implementa con el ritual OPSX completo:
 
-| Estado | Símbolo | Significado |
-|--------|---------|-------------|
-| ✅ Realizada | Completada | Tarea sólida, verificada, sin margen de error |
-| 🔄 En Desarrollo | Activa | Tarea en la que se está trabajando AHORA |
-| ⬜ Vacía | Pendiente | Tarea sin iniciar |
-
-### Reglas del Formato
-
-- **Una tarea a la vez**: Solo una tarea puede estar en 🔄 En Desarrollo en todo momento. Nunca se trabajan dos tareas en paralelo.
-- **Sin atajos**: Una tarea no puede pasar de ⬜ Vacía a ✅ Realizada sin pasar por 🔄 En Desarrollo.
-- **Desarrollo sólido**: ✅ Realizada significa que la tarea está verificada — el código compila, el archivo existe con el contenido correcto, no hay placeholders ni "TODO". Si hay margen de error, no está realizada.
-- **Subdivisión inteligente**: Tareas grandes (ej: "inicializar proyecto Vite") se subdividen en pasos más pequeños. Tareas de un solo archivo se mantienen como están para no alargar la lista innecesariamente.
-
-### Estructura de la Tabla
-
-```
-| # | Tarea | Estado |
-|---|-------|--------|
-| 1.1 | Crear estructura de directorios backend | ⬜ Vacía |
-| 1.2 | Crear `app/main.py` con FastAPI app | 🔄 En Desarrollo |
-| 1.3 | Crear `app/core/config.py` | ⬜ Vacía |
+```bash
+/opsx:propose <keyword>    # Crea proposal, design y tasks
+/opsx:apply <keyword>       # Implementa tareas una por una
+/opsx:archive <keyword>     # Sincroniza specs, commitea y archiva
 ```
 
-## Reglas de Implementación
+### Convenciones
 
-1. **Nunca implementar sin proposal y design aprobados.** Si no existen los artefactos del change, no hay apply.
-
-2. **El orden importa.** Si el change B necesita código del change A, A debe estar archivado antes de proponer B.
-
-3. **Tarea por tarea, nunca change completo.** Se implementa una sola tarea a la vez. Se completa (✅), se verifica, y recién ahí se pasa a la siguiente. Nunca se trabajan dos tareas en simultáneo, ni se delegan múltiples tareas en paralelo.
-
-4. **Un change = un commit** (o varios commits atómicos). Nunca mezcles dos changes en un mismo commit.
-
-5. **Las specs son código.** Se versionan en git, se revisan en PRs, evolucionan con el proyecto.
-
-6. **El tasks.md es la fuente de verdad del progreso.** Refleja el estado exacto de cada tarea (✅/🔄/⬜) en todo momento, y se actualiza inmediatamente después de cada cambio de estado.
+- **Checkboxes**: Cada Épica tiene un `- [ ]` en el `CHANGES.md`. Se tilda `- [x]` solo cuando está archivada y pusheada.
+- **Una Épica a la vez**: Nunca se trabajan dos Épicas en paralelo. Se completa una y se tilda antes de arrancar la siguiente.
+- **Tasks en checkboxes**: Los `tasks.md` de cada change usan `- [x]` / `- [ ]` — nada de tablas. El CLI `openspec status` parsea este formato nativamente.
+- **Sin atajos**: Ninguna tarea pasa de pendiente a completada sin implementarse y verificarse.
+- **Un change = un commit**: Al archivar, el CLI genera el commit automáticamente.

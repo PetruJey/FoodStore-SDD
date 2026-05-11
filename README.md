@@ -14,8 +14,9 @@ Antes de escribir una línea de código, leé la documentación modular desde `o
 | `openspec/docs/descripcion/` | Visión general, actores del sistema, stack tecnológico y arquitectura |
 | `openspec/docs/historias/` | Reglas de negocio, épicas e historias de usuario (US-000 a US-076) |
 | `openspec/docs/integrador/` | Especificación técnica: API REST, schemas, UoW, MercadoPago, etc. |
+| `docs/CHANGES.md` | **Mapa de épicas** — sprints, versiones y orden de implementación |
 
-> **Navegación rápida**: `openspec/docs/index.md` es el mapa de toda la documentación. Usalo para encontrar exactamente el archivo que necesitás sin leer documentos completos. Los archivos fuente originales están en `docs/`, pero siempre usá `openspec/docs/index.md` como entry point.
+> **Navegación rápida**: `openspec/docs/index.md` es el mapa de toda la documentación. `docs/CHANGES.md` es el mapa de implementación con el orden exacto de cada épica. Los archivos fuente originales están en `docs/`, pero siempre usá `openspec/docs/index.md` como entry point de documentación.
 
 ---
 
@@ -32,7 +33,7 @@ Antes de escribir una línea de código, leé la documentación modular desde `o
 - Python 3.11+
 - Node.js 18+
 - PostgreSQL 15+
-- Claude Code: `npm install -g @anthropic-ai/claude-code`
+- OpenCode: agente orquestador (OpenCode / Cursor / GitHub Copilot)
 - OpenSpec CLI: `npm install -g @fission-ai/openspec`
 
 ### 1. Clonar e inicializar
@@ -98,17 +99,21 @@ Todo cambio al sistema sigue este ciclo:
 
 ### Orden de implementación
 
+El orden detallado está en [`docs/CHANGES.md`](./docs/CHANGES.md). Cada épica tiene versión y palabra clave para `/opsx:propose`:
+
 ```
-us-000-setup               ← infraestructura base (Sprint 0)
-us-001-auth                ← JWT · RBAC · refresh tokens
-us-002-categorias          ← catálogo jerárquico
-us-003-productos           ← CRUD · stock · ingredientes
-us-004-carrito             ← estado client-side con Zustand
-us-005-pedidos             ← UoW · FSM · audit trail
-us-006-pagos-mercadopago   ← checkout · webhooks IPN
-us-007-admin               ← panel · métricas
-us-008-direcciones         ← direcciones de entrega
+Sprint 0 — Infraestructura y Setup       → v0.1  (completado ✅)
+Sprint 1 — Autenticación y Navegación    → v1.0  a v1.2
+Sprint 2 — Catálogo: Categ. e Ingred.    → v2.0  a v2.1
+Sprint 3 — Productos y Perfil            → v3.0  a v3.1
+Sprint 4 — Carrito y Direcciones         → v4.0  a v4.1
+Sprint 5 — Creación de Pedidos           → v5.0  a v5.1
+Sprint 6 — Pagos y FSM de Pedidos        → v6.0  a v6.1
+Sprint 7 — Visualización y Feedback      → v7.0  a v7.1
+Sprint 8 — Administración                → v8.0  a v8.3
 ```
+
+> Ver `docs/CHANGES.md` para el detalle completo de cada épica, sus dependencias y palabras clave.
 
 ---
 
