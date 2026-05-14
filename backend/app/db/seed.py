@@ -48,8 +48,8 @@ def create_seed_data(session: Session) -> None:
     estados_data = [
         {"nombre": "PENDIENTE", "descripcion": "Pedido creado, esperando pago"},
         {"nombre": "CONFIRMADO", "descripcion": "Pago aprobado, pedido en preparación"},
-        {"nombre": "PREPARANDO", "descripcion": "En preparación"},
-        {"nombre": "ENVIADO", "descripcion": "En camino"},
+        {"nombre": "EN_PREPARACION", "descripcion": "Pedido en preparación"},
+        {"nombre": "EN_CAMINO", "descripcion": "Pedido en camino"},
         {"nombre": "ENTREGADO", "descripcion": "Entregado al cliente"},
         {"nombre": "CANCELADO", "descripcion": "Pedido cancelado"},
     ]

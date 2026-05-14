@@ -1,14 +1,14 @@
 import { Suspense, lazy } from 'react';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 
-const Home = lazy(() => import('@/pages/Home'));
-const Productos = lazy(() => import('@/pages/Productos'));
-const Carrito = lazy(() => import('@/pages/Carrito'));
-const Checkout = lazy(() => import('@/pages/Checkout'));
-const Login = lazy(() => import('@/pages/Login'));
-const Register = lazy(() => import('@/pages/Register'));
-const AdminDashboard = lazy(() => import('@/pages/AdminDashboard'));
-const Profile = lazy(() => import('@/pages/Profile'));
+const Home = lazy(() => import('@/pages/home'));
+const Productos = lazy(() => import('@/pages/productos'));
+const Carrito = lazy(() => import('@/pages/carrito'));
+const Checkout = lazy(() => import('@/pages/checkout'));
+const Login = lazy(() => import('@/pages/login'));
+const Register = lazy(() => import('@/pages/register'));
+const AdminDashboard = lazy(() => import('@/pages/admin-dashboard'));
+const Profile = lazy(() => import('@/pages/profile'));
 
 function Layout() {
   return (

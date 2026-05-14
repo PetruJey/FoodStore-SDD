@@ -1,5 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+from app.core.errors import UnauthorizedError, ForbiddenError
 from sqlmodel import Session, select
 
 from app.core.database import get_session
@@ -15,27 +17,15 @@ def get_current_user(
 ) -> UsuarioModel:
     payload = security.decode_access_token(credentials.credentials)
     if payload is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido o expirado",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise UnauthorizedError(message="Token inválido o expirado")
 
     user_id = payload.get("sub")
     if user_id is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token inválido",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise UnauthorizedError(message="Token inválido")
 
     usuario = db.get(UsuarioModel, int(user_id))
     if usuario is None or usuario.deleted_at is not None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Usuario no encontrado",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        raise UnauthorizedError(message="Usuario no encontrado")
 
     return usuario
 
@@ -53,10 +43,7 @@ def require_role(roles: list[str]):
         user_roles = db.exec(statement).all()
 
         if not any(r in user_roles for r in roles):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="No tienes permisos para acceder a este recurso",
-            )
+            raise ForbiddenError(message="No tienes permisos para acceder a este recurso")
         return current_user
 
     return role_checker

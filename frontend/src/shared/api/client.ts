@@ -1,5 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { useAuthStore } from '@/shared/stores/authStore';
+import { useAuthStore } from '@/shared/stores/auth-store';
 
 interface FailedRequest {
   resolve: (token: string) => void;

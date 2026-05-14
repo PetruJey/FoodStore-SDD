@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     CORS_ORIGINS: str = "http://localhost:5173"
     MP_ACCESS_TOKEN: str = ""
+    MP_NOTIFICATION_URL: str = ""
 
     @property
     def cors_origins_list(self) -> List[str]:

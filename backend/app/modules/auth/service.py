@@ -3,6 +3,8 @@ import uuid
 from datetime import datetime, timedelta
 
 from fastapi import HTTPException, Request, status
+
+from app.core.errors import BadRequestError, NotFoundError, UnauthorizedError
 from sqlmodel import Session, select
 
 from app.core.config import get_settings
@@ -73,10 +75,7 @@ def register(db: Session, data: "RegisterRequest") -> dict:
             select(UsuarioModel).where(UsuarioModel.email == data.email)
         ).first()
         if existing:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El email ya está registrado",
-            )
+            raise BadRequestError(message="El email ya está registrado")
 
         hashed = security.hash_password(data.password)
         usuario = UsuarioModel(
@@ -91,10 +90,7 @@ def register(db: Session, data: "RegisterRequest") -> dict:
             select(RolModel).where(RolModel.nombre == "CLIENT")
         ).first()
         if not rol:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Error de configuración: rol CLIENT no encontrado",
-            )
+            raise NotFoundError(message="Error de configuración: rol CLIENT no encontrado")
         user_rol = UsuarioRolModel(usuario_id=usuario.id, rol_id=rol.id)
         db.add(user_rol)
 
@@ -112,11 +108,7 @@ def login(db: Session, data: "LoginRequest", request: Request) -> dict:
             or usuario.deleted_at is not None
             or not security.verify_password(data.password, usuario.password_hash)
         ):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Credenciales inválidas",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            raise UnauthorizedError(message="Credenciales inválidas")
 
         return _create_tokens(db, usuario)
 
@@ -130,6 +122,9 @@ def refresh_token(db: Session, token_str: str) -> dict:
         )
     ).first()
 
+    # NOTA: Se mantiene HTTPException (no AppError) porque refresh_token() hace commit
+    # antes del raise (detección de replay attacks). El error es genuinamente HTTP
+    # y el commit ya fue ejecutado, por lo que AppError no aplica aquí.
     if refresh is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import apiClient from '@/shared/api/client';
 import type { User, LoginRequest, RegisterRequest, TokenResponse } from '@/features/auth/types';
 
@@ -31,8 +30,7 @@ function extractError(err: unknown): string {
 }
 
 export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
+  (set, get) => ({
       user: null,
       token: null,
       refreshToken: null,
@@ -118,14 +116,4 @@ export const useAuthStore = create<AuthState>()(
 
       clearError: () => set({ error: null }),
     }),
-    {
-      name: 'food-store-auth',
-      partialize: (state) => ({
-        user: state.user,
-        token: state.token,
-        refreshToken: state.refreshToken,
-        isAuthenticated: state.isAuthenticated,
-      }),
-    },
-  ),
 );
