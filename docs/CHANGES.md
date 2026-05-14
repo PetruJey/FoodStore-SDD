@@ -20,7 +20,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 ## Sprint 0 — Infraestructura y Setup
 
-- [ ] **v0.1 — Proyecto Base** → `change-setup-project-structure`
+- [x] **v0.1 — Proyecto Base** → `change-setup-project-structure`
 
   **Funcionalidad**: Scaffolding completo del monorepo: backend FastAPI con estructura feature-first, frontend React+Vite+TypeScript con FSD, PostgreSQL con Alembic, patrones base (BaseRepository, Unit of Work, JWT), stores Zustand y cliente HTTP con interceptores.
 
