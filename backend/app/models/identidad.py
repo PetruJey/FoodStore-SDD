@@ -53,7 +53,9 @@ class RefreshTokenModel(SQLModel, table=True):
     __tablename__ = "refresh_tokens"
 
     id: Optional[int] = Field(default=None, primary_key=True)
+    token_id: str = Field(unique=True, index=True, nullable=False, description="JWT ID (jti) for the refresh token")
     token: str = Field(unique=True, index=True, nullable=False)
+    family_id: str = Field(index=True, nullable=False, description="UUID v4 grouping token generations")
     usuario_id: int = Field(foreign_key="usuarios.id", nullable=False)
     expires_at: datetime = Field(nullable=False)
     revoked: bool = Field(default=False, nullable=False)

@@ -44,61 +44,57 @@ class UnitOfWork:
         return self._repos[name]
 
     @property
-    def productos(self) -> BaseRepository:
-        from app.models.producto import ProductoModel
-
-        return self._get_repo(ProductoModel, "productos")
-
-    @property
-    def pedidos(self) -> BaseRepository:
-        from app.models.pedido import PedidoModel
-
-        return self._get_repo(PedidoModel, "pedidos")
-
-    @property
     def usuarios(self) -> BaseRepository:
-        from app.models.usuario import UsuarioModel
+        from app.models.identidad import UsuarioModel
 
         return self._get_repo(UsuarioModel, "usuarios")
 
     @property
     def auth(self) -> BaseRepository:
-        from app.models.refresh_token import RefreshTokenModel
+        from app.models.identidad import RefreshTokenModel
 
         return self._get_repo(RefreshTokenModel, "auth")
 
     @property
     def categorias(self) -> BaseRepository:
-        from app.models.categoria import CategoriaModel
+        from app.models.catalogo import CategoriaModel
 
         return self._get_repo(CategoriaModel, "categorias")
 
     @property
+    def productos(self) -> BaseRepository:
+        from app.models.catalogo import ProductoModel
+
+        return self._get_repo(ProductoModel, "productos")
+
+    @property
     def ingredientes(self) -> BaseRepository:
-        from app.models.ingrediente import IngredienteModel
+        from app.models.catalogo import IngredienteModel
 
         return self._get_repo(IngredienteModel, "ingredientes")
 
     @property
+    def pedidos(self) -> BaseRepository:
+        from app.models.ventas import PedidoModel
+
+        return self._get_repo(PedidoModel, "pedidos")
+
+    @property
     def pagos(self) -> BaseRepository:
-        from app.models.pago import PagoModel
+        from app.models.ventas import PagoModel
 
         return self._get_repo(PagoModel, "pagos")
 
     @property
     def direcciones(self) -> BaseRepository:
-        from app.models.direccion import DireccionEntregaModel
+        from app.models.identidad import DireccionEntregaModel
 
         return self._get_repo(DireccionEntregaModel, "direcciones")
 
     @property
     def admin(self) -> BaseRepository:
-        from app.models.usuario import UsuarioModel
+        from app.models.identidad import UsuarioModel
 
         return self._get_repo(UsuarioModel, "admin")
 
-    @property
-    def refreshtokens(self) -> BaseRepository:
-        from app.models.refresh_token import RefreshTokenModel
 
-        return self._get_repo(RefreshTokenModel, "refreshtokens")

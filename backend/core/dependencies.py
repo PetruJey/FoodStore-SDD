@@ -30,7 +30,7 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    from app.models.usuario import UsuarioModel
+    from app.models.identidad import UsuarioModel
 
     stmt = select(UsuarioModel).where(UsuarioModel.id == int(user_id))
     result = await session.execute(stmt)
@@ -43,14 +43,12 @@ async def get_current_user(
 
 def require_role(roles: list[str]):
     async def role_checker(current_user=Depends(get_current_user)):
-        from app.models.usuario import UsuarioModel
-
         if not hasattr(current_user, "roles") or not current_user.roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="No tienes permisos para acceder a este recurso",
             )
-        user_roles = {rol.nombre for rol in current_user.roles}
+        user_roles = {ur.rol.nombre for ur in current_user.roles}
         if not user_roles.intersection(roles):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

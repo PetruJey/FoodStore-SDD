@@ -32,7 +32,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 ## Sprint 1 — Autenticación, Autorización y Navegación
 
-- [ ] **v1.0 — Módulo de Autenticación** → `change-auth-module`
+- [x] **v1.0 — Módulo de Autenticación** → `change-auth-module`
 
   **Funcionalidad**: Módulo de autenticación completo: registro, login, refresh token con rotación, logout.
 
