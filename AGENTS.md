@@ -133,18 +133,52 @@ Para el detalle completo de cada tema, cargá `AGENTS-REFERENCIA.md`:
 
 El sistema anterior de fases SDD fue reemplazado por **OPSX** — un workflow fluido basado en el CLI `openspec`.
 
-### Regla FUNDAMENTAL de Orquestación
+### 🔴 REGLA ABSOLUTA DE DELEGACIÓN — NO NEGOCIABLE
 
-El orquestador **NUNCA, ABSOLUTAMENTE NUNCA trabaja por cuenta propia**. Su única responsabilidad es:
+El orquestador **TIENE PROHIBIDO** usar estas herramientas directamente:
+❌ `write` — escribir archivos de código, specs, tasks, diseño
+❌ `edit` — modificar archivos de código, specs, tasks, diseño
+❌ `task` (sin delegar) — ejecutar trabajo de implementación
+❌ Cualquier tool que cree o modifique archivos de implementación
 
-1. Verificar el estado actual (`openspec status`, `openspec list`)
-2. Cargar el skill correspondiente según la acción del usuario
-3. Delegar la ejecución a subagentes según las reglas de delegación
-4. Persistir progreso en engram después de cada acción completada
+**Herramientas PERMITIDAS** (solo estas):
+✅ `read` — para leer archivos (máximo 3 archivos por decisión)
+✅ `bash` — solo para comandos de estado: `openspec status`, `openspec list`, `openspec instructions`, `git log`, `git status`
+✅ `glob` / `grep` — búsquedas rápidas
+✅ `todowrite` — trackear progreso
+✅ `engram_mem_*` — persistir contexto
+✅ `delegate` — delegar TRABAJO a subagentes
+✅ `skill` — cargar skills
 
-Cualquier tarea que implique leer múltiples archivos, escribir código, ejecutar tests, o analizar — **se DELEGA**. El orquestador coordina, no implementa.
+### Cómo delegar CADA acción de OPSX
 
-Para más detalles, consultá las instrucciones del orchestrator en el system prompt del agente.
+Cuando el usuario pide una acción OPSX:
+
+1. **Ejecutá** el/los comandos `bash` de estado (PERMITIDOS)
+2. **Leé** los archivos que necesitás para decidir (máx. 3, PERMITIDO)
+3. **Cargá** el skill correspondiente (PERMITIDO)
+4. **Delegá** CADA artifact/subtarea a un `Task` subagente (OBLIGATORIO)
+
+| Skill cargado | Qué delegar al subagente |
+|---------------|--------------------------|
+| `openspec-propose` | Delegar la CREACIÓN de CADA artifact: proposal.md, design.md, specs/, tasks.md por separado. El subagente usa `write` con el contenido basado en `openspec instructions` |
+| `openspec-apply-change` | Delegar la implementación de CADA archivo de código. Un subagente por módulo o feature |
+| `openspec-archive-change` | Delegar la sincronización de specs y el movimiento de archivos |
+| `openspec-explore` | Delegar la investigación y lectura de archivos |
+
+**Regla de ORO**: Si el skill dice "create", "write", "implement", "build" — eso es TRABAJO DE SUBAGENTE. El orchestrator solo llama a `delegate` o `task` con las instrucciones.
+
+### Ciclo de verificación pre-commit
+
+Antes de ejecutar cualquier acción, el orquestador DEBE preguntarse:
+
+> "¿Esto que voy a hacer implica crear, modificar o analizar archivos?"
+> → SI → Delegar a subagente.
+> → NO → ¿Es estrictamente un comando de estado/coordinación?
+>   → SI → Hacerlo directo.
+>   → NO → Delegar.
+
+Si hay la MENOR duda, se DELEGA. Siempre.
 
 ---
 
