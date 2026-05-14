@@ -25,7 +25,6 @@ class CategoriaModel(SQLModel, table=True):
 
     hijos: List["CategoriaModel"] = Relationship(
         back_populates="padre",
-        sa_relationship_kwargs={"remote_side": "CategoriaModel.id"},
     )
     padre: Optional["CategoriaModel"] = Relationship(
         back_populates="hijos",

@@ -1,7 +1,10 @@
 from datetime import datetime, timedelta, timezone
 
+from fastapi import Request
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+
+from slowapi.util import get_remote_address
 
 from core.config import get_settings
 
@@ -51,3 +54,16 @@ def decode_token(token: str) -> dict[str, str | int | float | bool | None]:
         return payload
     except JWTError:
         raise
+
+
+def get_user_key(request: Request) -> str:
+    auth = request.headers.get("Authorization")
+    if auth and auth.startswith("Bearer "):
+        try:
+            payload = decode_token(auth[7:])
+            user_id = payload.get("sub")
+            if user_id:
+                return f"user:{user_id}"
+        except Exception:
+            pass
+    return get_remote_address(request)

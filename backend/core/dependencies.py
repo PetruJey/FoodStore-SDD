@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
 from core.database import get_session
@@ -30,13 +31,19 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    from app.models.identidad import UsuarioModel
+    from app.models.identidad import UsuarioModel, UsuarioRolModel
 
-    stmt = select(UsuarioModel).where(UsuarioModel.id == int(user_id))
+    stmt = (
+        select(UsuarioModel)
+        .options(selectinload(UsuarioModel.roles).selectinload(UsuarioRolModel.rol))
+        .where(UsuarioModel.id == int(user_id))
+    )
     result = await session.execute(stmt)
     user = result.scalar_one_or_none()
 
     if user is None:
+        raise credentials_exception
+    if not user.activo:
         raise credentials_exception
     return user
 

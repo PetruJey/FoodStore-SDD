@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: User registration
-The system SHALL allow new users to register with name, email and password, automatically assigning the CLIENT role.
+The system SHALL allow new users to register with name, email and password, automatically assigning the CLIENT role. The system SHALL rate-limit registration to 3 attempts per IP per 1-hour sliding window.
 
 #### Scenario: Successful registration
 - **WHEN** a user submits valid name, email and password to `POST /api/v1/auth/register`
@@ -24,6 +24,10 @@ The system SHALL allow new users to register with name, email and password, auto
 #### Scenario: Role not from request
 - **WHEN** a registration request includes a role field
 - **THEN** the system SHALL ignore the role field and always assign CLIENT
+
+#### Scenario: Rate limit exceeded on registration
+- **WHEN** a client exceeds 3 registration attempts per IP in a 1-hour window
+- **THEN** the system SHALL return HTTP 429 with Retry-After header
 
 ### Requirement: User login
 The system SHALL authenticate users by email and password, returning JWT tokens.

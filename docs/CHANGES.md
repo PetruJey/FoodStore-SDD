@@ -40,7 +40,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Dependencias**: change-setup-project-structure
 
-- [ ] **v1.1 — Control de Acceso RBAC** → `change-rbac-module`
+- [x] **v1.1 — Control de Acceso RBAC** → `change-rbac-module`
 
   **Funcionalidad**: Sistema RBAC: asignación de roles, verificación por endpoint, rate limiting en login.
 

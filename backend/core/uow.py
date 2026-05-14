@@ -97,4 +97,16 @@ class UnitOfWork:
 
         return self._get_repo(UsuarioModel, "admin")
 
+    @property
+    def roles(self) -> BaseRepository:
+        from app.models.identidad import RolModel
+
+        return self._get_repo(RolModel, "roles")
+
+    @property
+    def usuarios_roles(self) -> BaseRepository:
+        from app.models.identidad import UsuarioRolModel
+
+        return self._get_repo(UsuarioRolModel, "usuarios_roles")
+
 

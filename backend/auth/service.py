@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 from jose import JWTError
+from sqlalchemy.orm import selectinload
 from sqlmodel import select
 
 from app.models.identidad import RolModel, UsuarioModel, UsuarioRolModel
@@ -50,6 +51,15 @@ class AuthService:
                 ur = UsuarioRolModel(usuario_id=usuario.id, rol_id=rol.id)
                 self.uow.session.add(ur)
                 await self.uow.session.flush()
+
+            # Eager reload to avoid lazy loading in async context
+            stmt = (
+                select(UsuarioModel)
+                .options(selectinload(UsuarioModel.roles).selectinload(UsuarioRolModel.rol))
+                .where(UsuarioModel.id == usuario.id)
+            )
+            result = await self.uow.session.execute(stmt)
+            usuario = result.scalar_one()
 
             roles_list = [ur.rol.nombre for ur in (usuario.roles or []) if ur.rol]
 
@@ -102,6 +112,21 @@ class AuthService:
                 )
 
             user = users[0]
+
+            # Eager reload roles to avoid lazy loading in async context
+            stmt = (
+                select(UsuarioModel)
+                .options(selectinload(UsuarioModel.roles).selectinload(UsuarioRolModel.rol))
+                .where(UsuarioModel.id == user.id)
+            )
+            result = await self.uow.session.execute(stmt)
+            user = result.scalar_one()
+
+            if not user.activo:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Credenciales inválidas",
+                )
 
             if not verify_password(password, user.password_hash):
                 raise HTTPException(
@@ -193,6 +218,20 @@ class AuthService:
 
             family_id = stored_token.family_id
             user_id = stored_token.usuario_id
+
+            # Verify user still exists and is active
+            stmt = select(UsuarioModel).where(
+                UsuarioModel.id == user_id,
+                UsuarioModel.activo == True,
+            )
+            result = await self.uow.session.execute(stmt)
+            user = result.scalar_one_or_none()
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Usuario no encontrado",
+                )
+
             new_token_id = str(uuid4())
 
             access_token = create_access_token(data={"sub": str(user_id)})

@@ -33,6 +33,7 @@ app.add_middleware(SlowAPIMiddleware)
 
 register_error_handlers(app)
 
+from admin.rbac_router import router as rbac_router
 from admin.router import router as admin_router
 from auth.router import router as auth_router
 from categorias.router import router as categorias_router
@@ -55,6 +56,7 @@ app.include_router(pedidos_router, prefix=API_PREFIX)
 app.include_router(pagos_router, prefix=API_PREFIX)
 app.include_router(direcciones_router, prefix=API_PREFIX)
 app.include_router(admin_router, prefix=API_PREFIX)
+app.include_router(rbac_router, prefix=API_PREFIX)
 app.include_router(refreshtokens_router, prefix=API_PREFIX)
 
 
