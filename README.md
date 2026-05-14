@@ -1,6 +1,6 @@
 # Food Store — Repositorio Base
 
-Sistema de e-commerce de productos alimenticios desarrollado con **Spec-Driven Development (SDD)** usando OPSX y Claude Code.
+Sistema de e-commerce de productos alimenticios desarrollado con **Spec-Driven Development (SDD)** usando OPSX y OpenCode.
 
 ---
 
@@ -123,11 +123,11 @@ Crear `backend/.env` a partir de `backend/.env.example`:
 
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/foodstore
-SECRET_KEY=tu-clave-secreta-de-64-caracteres-minimo
+SECRET_KEY=tu-clave-secreta-de-32-caracteres-minimo
+ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 REFRESH_TOKEN_EXPIRE_DAYS=7
 MP_ACCESS_TOKEN=TEST-tu-token-de-mercadopago
-MP_PUBLIC_KEY=TEST-tu-public-key-de-mercadopago
 CORS_ORIGINS=http://localhost:5173
 ```
 

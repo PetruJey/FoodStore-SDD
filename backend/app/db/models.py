@@ -69,3 +69,47 @@ class UsuarioRolModel(SQLModel, table=True):
 
     usuario: UsuarioModel = Relationship(back_populates="roles")
     rol: RolModel = Relationship(back_populates="usuarios")
+
+
+class RefreshTokenModel(SQLModel, table=True):
+    __tablename__ = "refreshtokens"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    usuario_id: int = Field(foreign_key="usuarios.id", nullable=False, index=True)
+    token_hash: str = Field(nullable=False, index=True)
+    family_id: str = Field(nullable=False, index=True)
+    expires_at: datetime = Field(nullable=False)
+    revoked_at: Optional[datetime] = Field(default=None, nullable=True)
+    created_at: datetime = Field(
+        default=None,
+        nullable=False,
+        sa_column_kwargs={"server_default": func.now()},
+    )
+
+
+class EstadoPedidoModel(SQLModel, table=True):
+    __tablename__ = "estados_pedido"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    nombre: str = Field(max_length=50, unique=True, index=True)
+    descripcion: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        sa_column_kwargs={"onupdate": datetime.utcnow},
+        nullable=False,
+    )
+
+
+class FormaPagoModel(SQLModel, table=True):
+    __tablename__ = "formas_pago"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    nombre: str = Field(max_length=50, unique=True, index=True)
+    descripcion: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        sa_column_kwargs={"onupdate": datetime.utcnow},
+        nullable=False,
+    )

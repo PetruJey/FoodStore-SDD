@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { useAuthStore } from '@/shared/stores/authStore';
 
 interface FailedRequest {
   resolve: (token: string) => void;
@@ -31,7 +32,7 @@ function processQueue(error: unknown, token: string | null) {
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('auth-token');
+    const token = useAuthStore.getState().token;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -46,6 +47,10 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
     if (error.response?.status !== 401 || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    if (originalRequest.url?.includes('/auth/refresh')) {
       return Promise.reject(error);
     }
 
@@ -64,15 +69,12 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      const refreshToken = localStorage.getItem('refresh-token');
-      if (!refreshToken) {
-        throw new Error('No refresh token available');
+      await useAuthStore.getState().refresh();
+      const newToken = useAuthStore.getState().token;
+
+      if (!newToken) {
+        throw new Error('Refresh failed');
       }
-
-      const { data } = await apiClient.post('/auth/refresh', { refreshToken });
-
-      const newToken: string = data.accessToken ?? data.token ?? data.access_token;
-      localStorage.setItem('auth-token', newToken);
 
       processQueue(null, newToken);
 
@@ -82,8 +84,7 @@ apiClient.interceptors.response.use(
       return apiClient(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError, null);
-      localStorage.removeItem('auth-token');
-      localStorage.removeItem('refresh-token');
+      useAuthStore.getState().logout();
       window.location.href = '/login';
       return Promise.reject(refreshError);
     } finally {

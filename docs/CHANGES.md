@@ -34,7 +34,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 ## Sprint 1 — Autenticación, Autorización y Navegación
 
-- [ ] **v1.0 — Módulo de Autenticación** → `change-auth-module`
+- [x] **v1.0 — Módulo de Autenticación** → `change-auth-module`
 
   `/opsx:propose change-auth-module`
 
@@ -42,7 +42,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-001, US-002, US-003, US-004
 
-  **Dependencias**: change-setup-database
+  **Dependencias**: change-setup-project-structure
 
 - [ ] **v1.1 — Control de Acceso RBAC** → `change-rbac-module`
 
@@ -62,7 +62,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-075, US-076, US-066, US-067
 
-  **Dependencias**: change-auth-module, change-rbac-module, change-setup-frontend
+  **Dependencias**: change-auth-module, change-rbac-module, change-setup-project-structure
 
 ---
 
@@ -76,7 +76,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-007, US-008, US-009, US-010
 
-  **Dependencias**: change-setup-database, change-rbac-module
+  **Dependencias**: change-setup-project-structure, change-rbac-module
 
 - [ ] **v2.1 — CRUD de Ingredientes** → `change-ingredients-crud`
 
@@ -86,7 +86,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-011, US-012, US-013, US-014
 
-  **Dependencias**: change-setup-database, change-rbac-module
+  **Dependencias**: change-setup-project-structure, change-rbac-module
 
 ---
 
@@ -100,7 +100,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-015, US-016, US-017, US-018, US-019, US-020, US-021, US-022, US-023
 
-  **Dependencias**: change-setup-database, change-categories-crud, change-ingredients-crud, change-rbac-module
+  **Dependencias**: change-setup-project-structure, change-categories-crud, change-ingredients-crud, change-rbac-module
 
 - [ ] **v3.1 — Perfil del Cliente** → `change-client-profile`
 
@@ -124,7 +124,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-024, US-025, US-026, US-027, US-028
 
-  **Dependencias**: change-setup-database, change-auth-module
+  **Dependencias**: change-setup-project-structure, change-auth-module
 
 - [ ] **v4.1 — Carrito de Compras** → `change-shopping-cart`
 
@@ -134,7 +134,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-029, US-030, US-031, US-032, US-033, US-034
 
-  **Dependencias**: change-products-crud, change-ingredients-crud, change-setup-frontend
+  **Dependencias**: change-products-crud, change-ingredients-crud, change-setup-project-structure
 
 ---
 
@@ -158,7 +158,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-035, US-036, US-037, US-038
 
-  **Dependencias**: change-setup-backend, change-shopping-cart, change-delivery-addresses, change-checkout-validation
+  **Dependencias**: change-setup-project-structure, change-shopping-cart, change-delivery-addresses, change-checkout-validation
 
 ---
 
@@ -172,7 +172,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-045, US-046, US-047, US-048
 
-  **Dependencias**: change-order-creation, change-setup-database
+  **Dependencias**: change-order-creation, change-setup-project-structure
 
 - [ ] **v6.1 — Máquina de Estados del Pedido** → `change-order-fsm`
 
@@ -220,7 +220,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-053, US-054, US-055
 
-  **Dependencias**: change-auth-module, change-rbac-module, change-setup-database
+  **Dependencias**: change-auth-module, change-rbac-module, change-setup-project-structure
 
 - [ ] **v8.1 — Gestión Completa de Catálogo y Pedidos** → `change-admin-catalog`
 
@@ -250,7 +250,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
   **Historias**: US-060
 
-  **Dependencias**: change-setup-database
+  **Dependencias**: change-setup-project-structure
 
 ---
 
@@ -266,9 +266,9 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 | **5** | checkout-validation, order-creation | v5.0 — v5.1 | US-035 a US-038, US-069, US-070 |
 | **6** | mercadopago-integration, order-fsm | v6.0 — v6.1 | US-039 a US-048 |
 | **7** | order-viewing, order-feedback | v7.0 — v7.1 | US-049 a US-052, US-071, US-072 |
-| **8** | admin-user-management, admin-catalog, admin-dashboard, system-configuration | v8.0 — v8.3 | US-053 a US-060 |
+| **8** | admin-user-management, admin-catalog, admin-dashboard, system-configuration | v8.0 — v8.3 | US-053 a US-060, US-064, US-065 |
 
-**Total: 17 Épicas, 77 historias de usuario**
+**Total: 20 Épicas, 77 historias de usuario**
 
 ---
 
@@ -277,31 +277,35 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 ```
 Sprint 0
 │
-└───► setup-project-structure ✅
+└───► change-setup-project-structure ✅
             │
-            ├───► auth-module ──► rbac-module
-            │                    │
-            │                    ├──► categories-crud
-            │                    │
-            │                    ├──► ingredients-crud
-            │                    │
-            │                    └──► client-profile
+            ├───► change-auth-module ──► change-rbac-module
+            │                                │
+            │                                ├──► change-categories-crud
+            │                                │
+            │                                ├──► change-ingredients-crud
+            │                                │
+            │                                └──► change-client-profile
             │
-            ├──► delivery-addresses
+            ├───► change-delivery-addresses
             │
-            └──► shopping-cart ──► checkout-validation
-                                          │
-                                          └───► order-creation
-                                                       │
-                                                       ├──► mercadopago-integration
-                                                       │
-                                                       ├──► order-fsm
-                                                       │
-                                                       └──► order-viewing
-                                                           │
-                                                           └──► order-feedback
+            └───► change-shopping-cart ──► change-checkout-validation
+                                                  │
+                                                  └───► change-order-creation
+                                                               │
+                                                               ├──► change-mercadopago-integration
+                                                               │
+                                                               ├──► change-order-fsm
+                                                               │
+                                                               └───► change-order-viewing
+                                                                     │
+                                                                     └──► change-order-feedback
 
-(Sprint 8 admin épicas dependen de changes base)
+(Sprint 8 admin épicas dependen de changes base:
+change-admin-user-management → change-setup-project-structure, change-auth-module, change-rbac-module
+change-admin-catalog → change-products-crud, change-categories-crud, change-order-viewing
+change-admin-dashboard → change-order-creation, change-admin-user-management
+change-system-configuration → change-setup-project-structure)
 ```
 
 ---

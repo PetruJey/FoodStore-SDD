@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
 
 from app.core.security import hash_password
-from app.db.models import RolModel, UsuarioModel, UsuarioRolModel
+from app.db.models import EstadoPedidoModel, FormaPagoModel, RolModel, UsuarioModel, UsuarioRolModel
 
 
 def create_seed_data(session: Session) -> None:
@@ -44,5 +44,33 @@ def create_seed_data(session: Session) -> None:
             rol_id=admin_rol.id,
         )
         session.add(usuario_rol)
+
+    estados_data = [
+        {"nombre": "PENDIENTE", "descripcion": "Pedido creado, esperando pago"},
+        {"nombre": "CONFIRMADO", "descripcion": "Pago aprobado, pedido en preparación"},
+        {"nombre": "PREPARANDO", "descripcion": "En preparación"},
+        {"nombre": "ENVIADO", "descripcion": "En camino"},
+        {"nombre": "ENTREGADO", "descripcion": "Entregado al cliente"},
+        {"nombre": "CANCELADO", "descripcion": "Pedido cancelado"},
+    ]
+
+    for estado_data in estados_data:
+        existing = session.exec(
+            select(EstadoPedidoModel).where(EstadoPedidoModel.nombre == estado_data["nombre"])
+        ).first()
+        if not existing:
+            session.add(EstadoPedidoModel(**estado_data))
+
+    formas_pago_data = [
+        {"nombre": "MERCADOPAGO", "descripcion": "Pago con MercadoPago (tarjeta/débito/efectivo)"},
+        {"nombre": "EFECTIVO", "descripcion": "Pago en efectivo al recibir"},
+    ]
+
+    for fp_data in formas_pago_data:
+        existing = session.exec(
+            select(FormaPagoModel).where(FormaPagoModel.nombre == fp_data["nombre"])
+        ).first()
+        if not existing:
+            session.add(FormaPagoModel(**fp_data))
 
     session.commit()
