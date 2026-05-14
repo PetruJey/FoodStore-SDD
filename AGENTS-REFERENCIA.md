@@ -358,8 +358,27 @@ VITE_MP_PUBLIC_KEY=TEST-xxxx
 
 ## Workflow OPSX (reemplaza SDD)
 
-El sistema anterior de fases SDD (Spec-Driven Development con agentes BigPickle, Nemotron, DeepSeek, Hy3) fue reemplazado por **OPSX** — un workflow fluido basado en el CLI `openspec`.
+El sistema anterior de fases SDD fue reemplazado por **OPSX** — un workflow fluido basado en el CLI `openspec`.
 
-El orchestrator (`big-pickle`) coordina todo el flujo usando los comandos `/opsx:explore`, `/opsx:propose`, `/opsx:apply`, `/opsx:archive`. Ya no hay fases rígidas ni asignación fija de modelos por fase — el orchestrator decide según el contexto.
+### ⚠️ Regla NO OPCIONAL — Delegación Obligatoria
+
+El orquestador **NUNCA, ABSOLUTAMENTE NUNCA trabaja por cuenta propia**. Está estrictamente prohibido que el orquestador:
+
+- Implemente código directamente
+- Lea 4+ archivos de exploración inline
+- Ejecute tests o builds
+- Escriba features multi-archivo
+
+**Siempre debe delegar** a los subagentes correspondientes. Su rol es exclusivamente coordinar, verificar estado, cargar skills, y persistir progreso en engram.
 
 Para más detalles, consultá las instrucciones del orchestrator en el system prompt del agente.
+
+---
+
+## ⚠️ Regla NO OPCIONAL — Coherencia Documental
+
+Cada modificación que se realice en `AGENTS.md`, `AGENTS-REFERENCIA.md`, `README.md` y cualquier archivo `.md` derivado de `openspec/docs/index.md` debe mantener **estricta coherencia** con `docs/CHANGES.md`.
+
+Cuando `docs/CHANGES.md` sea modificado, se debe comprobar si dicha modificación afecta a los archivos mencionados anteriormente y, de ser el caso, adaptarlos para reflejar los cambios.
+
+Esto aplica tanto a modificaciones manuales como a changes ejecutados mediante el workflow OPSX.

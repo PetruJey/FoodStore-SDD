@@ -20,9 +20,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 ## Sprint 0 — Infraestructura y Setup
 
-- [x] **v0.1 — Proyecto Base** → `change-setup-project-structure`
-
-  `/opsx:propose change-setup-project-structure`
+- [ ] **v0.1 — Proyecto Base** → `change-setup-project-structure`
 
   **Funcionalidad**: Scaffolding completo del monorepo: backend FastAPI con estructura feature-first, frontend React+Vite+TypeScript con FSD, PostgreSQL con Alembic, patrones base (BaseRepository, Unit of Work, JWT), stores Zustand y cliente HTTP con interceptores.
 
@@ -34,9 +32,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 ## Sprint 1 — Autenticación, Autorización y Navegación
 
-- [x] **v1.0 — Módulo de Autenticación** → `change-auth-module`
-
-  `/opsx:propose change-auth-module`
+- [ ] **v1.0 — Módulo de Autenticación** → `change-auth-module`
 
   **Funcionalidad**: Módulo de autenticación completo: registro, login, refresh token con rotación, logout.
 
@@ -46,8 +42,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v1.1 — Control de Acceso RBAC** → `change-rbac-module`
 
-  `/opsx:propose change-rbac-module`
-
   **Funcionalidad**: Sistema RBAC: asignación de roles, verificación por endpoint, rate limiting en login.
 
   **Historias**: US-005, US-006, US-073
@@ -55,8 +49,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-auth-module
 
 - [ ] **v1.2 — Navegación Frontend** → `change-frontend-navigation`
-
-  `/opsx:propose change-frontend-navigation`
 
   **Funcionalidad**: Navegación adaptada al rol, guards de autenticación, manejo de token expirado y errores globales.
 
@@ -70,8 +62,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v2.0 — CRUD de Categorías** → `change-categories-crud`
 
-  `/opsx:propose change-categories-crud`
-
   **Funcionalidad**: CRUD de categorías con soporte jerárquico (CTE recursivo), soft delete y validación de ciclos.
 
   **Historias**: US-007, US-008, US-009, US-010
@@ -79,8 +69,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-setup-project-structure, change-rbac-module
 
 - [ ] **v2.1 — CRUD de Ingredientes** → `change-ingredients-crud`
-
-  `/opsx:propose change-ingredients-crud`
 
   **Funcionalidad**: CRUD de ingredientes con campo `es_alergeno` para identificar alérgenos.
 
@@ -94,8 +82,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v3.0 — CRUD de Productos** → `change-products-crud`
 
-  `/opsx:propose change-products-crud`
-
   **Funcionalidad**: CRUD de productos, asociación a categorías e ingredientes, stock, catálogo público y filtros por alérgenos.
 
   **Historias**: US-015, US-016, US-017, US-018, US-019, US-020, US-021, US-022, US-023
@@ -103,8 +89,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-setup-project-structure, change-categories-crud, change-ingredients-crud, change-rbac-module
 
 - [ ] **v3.1 — Perfil del Cliente** → `change-client-profile`
-
-  `/opsx:propose change-client-profile`
 
   **Funcionalidad**: Gestión del perfil del cliente: ver, editar datos personales y cambiar contraseña.
 
@@ -118,8 +102,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v4.0 — Direcciones de Entrega** → `change-delivery-addresses`
 
-  `/opsx:propose change-delivery-addresses`
-
   **Funcionalidad**: CRUD de direcciones de entrega con dirección predeterminada por usuario.
 
   **Historias**: US-024, US-025, US-026, US-027, US-028
@@ -127,8 +109,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-setup-project-structure, change-auth-module
 
 - [ ] **v4.1 — Carrito de Compras** → `change-shopping-cart`
-
-  `/opsx:propose change-shopping-cart`
 
   **Funcionalidad**: Carrito client-side con Zustand: agregar, personalizar (excluir ingredientes), modificar cantidades, eliminar, ver resumen, vaciar.
 
@@ -142,8 +122,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v5.0 — Validación de Checkout** → `change-checkout-validation`
 
-  `/opsx:propose change-checkout-validation`
-
   **Funcionalidad**: Validaciones previas al checkout: disponibilidad de stock y detección de cambios de precio.
 
   **Historias**: US-069, US-070
@@ -151,8 +129,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-shopping-cart, change-products-crud
 
 - [ ] **v5.1 — Creación Atómica de Pedidos** → `change-order-creation`
-
-  `/opsx:propose change-order-creation`
 
   **Funcionalidad**: Creación atómica de pedidos con Unit of Work, snapshots de precios y dirección, validación de stock dentro de la transacción.
 
@@ -166,8 +142,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v6.0 — Integración MercadoPago** → `change-mercadopago-integration`
 
-  `/opsx:propose change-mercadopago-integration`
-
   **Funcionalidad**: Integración con MercadoPago: creación de preferencia, webhook IPN, procesamiento de estados y reintentos.
 
   **Historias**: US-045, US-046, US-047, US-048
@@ -175,8 +149,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-order-creation, change-setup-project-structure
 
 - [ ] **v6.1 — Máquina de Estados del Pedido** → `change-order-fsm`
-
-  `/opsx:propose change-order-fsm`
 
   **Funcionalidad**: Máquina de estados de pedidos: transiciones, decremento/restauración de stock, cancelaciones y auditoría append-only.
 
@@ -190,8 +162,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v7.0 — Visualización de Pedidos** → `change-order-viewing`
 
-  `/opsx:propose change-order-viewing`
-
   **Funcionalidad**: Visualización de pedidos: historial del cliente, detalle propio, panel de gestión para Gestor de Pedidos.
 
   **Historias**: US-049, US-050, US-051, US-052
@@ -199,8 +169,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-order-creation, change-order-fsm, change-rbac-module
 
 - [ ] **v7.1 — Feedback de Pedido y Pago** → `change-order-feedback`
-
-  `/opsx:propose change-order-feedback`
 
   **Funcionalidad**: Feedback visual: confirmación de pedido creado y resultado del pago al retornar de MercadoPago.
 
@@ -214,8 +182,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v8.0 — Gestión de Usuarios** → `change-admin-user-management`
 
-  `/opsx:propose change-admin-user-management`
-
   **Funcionalidad**: Panel de gestión de usuarios: listado, edición de roles, activación/desactivación.
 
   **Historias**: US-053, US-054, US-055
@@ -223,8 +189,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-auth-module, change-rbac-module, change-setup-project-structure
 
 - [ ] **v8.1 — Gestión Completa de Catálogo y Pedidos** → `change-admin-catalog`
-
-  `/opsx:propose change-admin-catalog`
 
   **Funcionalidad**: Acceso completo del Admin al catálogo y pedidos: privilegios completos sobre todos los módulos.
 
@@ -234,8 +198,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 - [ ] **v8.2 — Dashboard de Métricas** → `change-admin-dashboard`
 
-  `/opsx:propose change-admin-dashboard`
-
   **Funcionalidad**: Dashboard de métricas: KPIs, evolución de ventas, ranking de productos, distribución por estado.
 
   **Historias**: US-056, US-057, US-058, US-059
@@ -243,8 +205,6 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
   **Dependencias**: change-order-creation, change-admin-user-management
 
 - [ ] **v8.3 — Configuración del Sistema** → `change-system-configuration`
-
-  `/opsx:propose change-system-configuration`
 
   **Funcionalidad**: Panel de configuración del sistema: parámetros operativos editables por el ADMIN.
 
@@ -258,7 +218,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 
 | Sprint | Épicas | Versiones | Historias |
 |--------|--------|-----------|-----------|
-| **0** ✅ | setup-project-structure | v0.1 | US-000, US-000a-e, US-068, US-074 |
+| **0** | setup-project-structure | v0.1 | US-000, US-000a-e, US-068, US-074 |
 | **1** | auth-module, rbac-module, frontend-navigation | v1.0 — v1.2 | US-001 a US-006, US-073, US-075, US-076, US-066, US-067 |
 | **2** | categories-crud, ingredients-crud | v2.0 — v2.1 | US-007 a US-014 |
 | **3** | products-crud, client-profile | v3.0 — v3.1 | US-015 a US-023, US-061 a US-063 |
@@ -277,7 +237,7 @@ Cada checkbox `- [ ]` marca una Épica. Se tilda `- [x]` cuando está archivada 
 ```
 Sprint 0
 │
-└───► change-setup-project-structure ✅
+└───► change-setup-project-structure
             │
             ├───► change-auth-module ──► change-rbac-module
             │                                │

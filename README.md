@@ -103,7 +103,7 @@ El orden detallado está en [`docs/CHANGES.md`](./docs/CHANGES.md). Cada épica 
 
 ```
 Sprint 0 — Infraestructura y Setup       → v0.1  (completado ✅)
-Sprint 1 — Autenticación y Navegación    → v1.0  a v1.2
+Sprint 1 — Autenticación, Autorización y Navegación    → v1.0 ✅, v1.1 a v1.2
 Sprint 2 — Catálogo: Categ. e Ingred.    → v2.0  a v2.1
 Sprint 3 — Productos y Perfil            → v3.0  a v3.1
 Sprint 4 — Carrito y Direcciones         → v4.0  a v4.1

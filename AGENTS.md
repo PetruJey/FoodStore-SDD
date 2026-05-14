@@ -22,7 +22,7 @@ Además, **`docs/CHANGES.md`** contiene el mapa completo de épicas con versione
 
 - **5 actores**: Cliente, Admin, Gestor de Stock, Gestor de Pedidos, Sistema
 - **Funcionalidades**: catálogo, carrito, pedidos con FSM de 6 estados, pagos con MercadoPago, panel de admin
-- **Metodología**: Spec-Driven Development (SDD) con cambios atómicos
+- **Metodología**: OPSX (Spec-Driven Development fluido con `openspec` CLI)
 - **77 historias de usuario** (US-000 a US-076)
 
 ---
@@ -125,6 +125,36 @@ Para el detalle completo de cada tema, cargá `AGENTS-REFERENCIA.md`:
 | Gemas del Proyecto | `AGENTS-REFERENCIA.md` — sección Gemas |
 | Variables de Entorno | `AGENTS-REFERENCIA.md` — sección Env Vars |
 | Recursos + Glosario | `AGENTS-REFERENCIA.md` — sección Recursos |
+| OPSX Workflow | `AGENTS-REFERENCIA.md` — sección OPSX |
+
+---
+
+## Workflow OPSX (reemplaza SDD)
+
+El sistema anterior de fases SDD fue reemplazado por **OPSX** — un workflow fluido basado en el CLI `openspec`.
+
+### Regla FUNDAMENTAL de Orquestación
+
+El orquestador **NUNCA, ABSOLUTAMENTE NUNCA trabaja por cuenta propia**. Su única responsabilidad es:
+
+1. Verificar el estado actual (`openspec status`, `openspec list`)
+2. Cargar el skill correspondiente según la acción del usuario
+3. Delegar la ejecución a subagentes según las reglas de delegación
+4. Persistir progreso en engram después de cada acción completada
+
+Cualquier tarea que implique leer múltiples archivos, escribir código, ejecutar tests, o analizar — **se DELEGA**. El orquestador coordina, no implementa.
+
+Para más detalles, consultá las instrucciones del orchestrator en el system prompt del agente.
+
+---
+
+## ⚠️ Regla NO OPCIONAL — Coherencia Documental
+
+Cada modificación que se realice en `AGENTS.md`, `AGENTS-REFERENCIA.md`, `README.md` y cualquier archivo `.md` derivado de `openspec/docs/index.md` debe mantener **estricta coherencia** con `docs/CHANGES.md`.
+
+Cuando `docs/CHANGES.md` sea modificado, se debe comprobar si dicha modificación afecta a los archivos mencionados anteriormente y, de ser el caso, adaptarlos para reflejar los cambios.
+
+Esto aplica tanto a modificaciones manuales como a changes ejecutados mediante el workflow OPSX.
 
 ---
 
